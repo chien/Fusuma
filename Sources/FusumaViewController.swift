@@ -42,12 +42,8 @@ public enum FusumaModeOrder {
     @IBOutlet weak var photoLibraryViewerContainer: UIView!
     @IBOutlet weak var cameraShotContainer: UIView!
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var menuView: UIView!
-    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var libraryButton: UIButton!
     @IBOutlet weak var cameraButton: UIButton!
-    @IBOutlet weak var doneButton: UIButton!
 
     @IBOutlet var libraryFirstConstraints: [NSLayoutConstraint]!
     @IBOutlet var cameraFirstConstraints: [NSLayoutConstraint]!
@@ -72,17 +68,11 @@ public enum FusumaModeOrder {
         
         cameraView.delegate = self
         albumView.delegate  = self
-
-        menuView.backgroundColor = fusumaBackgroundColor
-        menuView.addBottomBorder(UIColor.blackColor(), width: 1.0)
         
         let bundle = NSBundle(forClass: self.classForCoder)
         
         let albumImage = UIImage(named: "ic_insert_photo", inBundle: bundle, compatibleWithTraitCollection: nil)
         let cameraImage = UIImage(named: "ic_photo_camera", inBundle: bundle, compatibleWithTraitCollection: nil)
-        let checkImage = UIImage(named: "ic_check", inBundle: bundle, compatibleWithTraitCollection: nil)
-		let closeImage = UIImage(named: "ic_close", inBundle: bundle, compatibleWithTraitCollection: nil)
-
         
         libraryButton.setImage(albumImage?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         libraryButton.setImage(albumImage?.imageWithRenderingMode(.AlwaysTemplate), forState: .Highlighted)
@@ -94,12 +84,6 @@ public enum FusumaModeOrder {
         cameraButton.setImage(cameraImage?.imageWithRenderingMode(.AlwaysTemplate), forState: .Selected)
 		cameraButton.tintColor  = fusumaTintColor
 		
-		closeButton.setImage(closeImage?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
-		closeButton.setImage(closeImage?.imageWithRenderingMode(.AlwaysTemplate), forState: .Highlighted)
-		closeButton.setImage(closeImage?.imageWithRenderingMode(.AlwaysTemplate), forState: .Selected)
-		closeButton.tintColor = fusumaBaseTintColor
-		
-		
         cameraButton.adjustsImageWhenHighlighted  = false
         libraryButton.adjustsImageWhenHighlighted = false
         cameraButton.clipsToBounds  = true
@@ -108,11 +92,6 @@ public enum FusumaModeOrder {
         changeMode(defaultMode ?? FusumaMode.Library)
         photoLibraryViewerContainer.addSubview(albumView)
         cameraShotContainer.addSubview(cameraView)
-        
-        doneButton.setImage(checkImage?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
-        doneButton.tintColor = fusumaBaseTintColor
-
-		titleLabel.textColor = fusumaBaseTintColor
 		
         if modeOrder != .LibraryFirst {
             libraryFirstConstraints.forEach { $0.priority = 250 }
@@ -210,17 +189,10 @@ private extension FusumaViewController {
         dishighlightButtons()
         
         if mode == FusumaMode.Library {
-			titleLabel.text = NSLocalizedString("CAMERA ROLL", comment: "CAMERA ROLL")
-            doneButton.hidden = false
-            
             highlightButton(libraryButton)
             self.view.insertSubview(photoLibraryViewerContainer, aboveSubview: cameraShotContainer)
             
         } else {
-
-			titleLabel.text = NSLocalizedString("PHOTO", comment: "PHOTO")
-            doneButton.hidden = true
-            
             highlightButton(cameraButton)
             self.view.insertSubview(cameraShotContainer, aboveSubview: photoLibraryViewerContainer)
         }
